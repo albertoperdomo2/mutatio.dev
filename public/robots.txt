@@ -1,0 +1,14 @@
+# robots.txt for mutatio.dev
+User-agent: *
+Allow: /
+Allow: /privacy
+Allow: /terms
+Disallow: /login
+Disallow: /register
+Disallow: /settings
+Disallow: /api/
+Disallow: /history/
+Disallow: /mutations/
+
+# sitemap
+Sitemap: https://mutatio.dev/sitemap.xml

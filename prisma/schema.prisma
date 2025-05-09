@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(cuid())
+  name          String?
+  email         String         @unique
+  password      String?
+  emailVerified DateTime?
+  image         String?
+  modelConfigs  String?        
+  accounts      Account[]
+  sessions      Session[]
+  promptSessions PromptSession[]
+  mutationTypes MutationType[] 
+  savedMutations SavedMutation[] 
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?
+  access_token       String?
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?
+  session_state      String?
+  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model PromptSession {
+  id          String   @id @default(cuid())
+  userId      String
+  basePrompt  String
+  mutations   String   
+  settings    String   
+  starred     Boolean  @default(false) 
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model MutationType {
+  id          String   @id @default(cuid())
+  userId      String
+  name        String
+  description String?
+  systemPrompt String   
+  isDefault   Boolean  @default(false) 
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([userId, name]) 
+}
+
+model SavedMutation {
+  id          String   @id @default(cuid())
+  userId      String
+  name        String
+  description String?
+  originalPrompt String
+  starred     Boolean  @default(false)
+  tags        String?  
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  versions    SavedMutationVersion[]
+  responses   MutationResponse[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([userId, name]) 
+}
+
+model SavedMutationVersion {
+  id               String   @id @default(cuid())
+  savedMutationId  String
+  versionNumber    Int
+  prompt           String
+  notes            String?
+  savedMutation    SavedMutation @relation(fields: [savedMutationId], references: [id], onDelete: Cascade)
+  responses        MutationResponse[]
+  createdAt        DateTime @default(now())
+  
+  @@unique([savedMutationId, versionNumber]) 
+}
+
+model MutationResponse {
+  id                   String   @id @default(cuid())
+  savedMutationId      String
+  savedMutationVersionId String?
+  prompt               String   
+  modelId              String
+  provider             String
+  response             String   
+  metadata             String?  
+  savedMutation        SavedMutation @relation(fields: [savedMutationId], references: [id], onDelete: Cascade)
+  savedMutationVersion SavedMutationVersion? @relation(fields: [savedMutationVersionId], references: [id], onDelete: SetNull)
+  createdAt            DateTime @default(now())
+}
