@@ -5,7 +5,8 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useToast } from "@/components/ui/use-toast"
-import { Copy, Check, Diff, ArrowUpRight } from "lucide-react"
+import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
+import { DollarSign, Copy, Check, Diff, ArrowUpRight } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { getMutationTypeColor } from "@/lib/utils-diff"
 import { DiffView } from "@/components/diff-view"
@@ -15,6 +16,8 @@ interface Mutation {
   text: string
   type: string
   strength: number
+  tokens: number
+  cost: number
 }
 
 interface PromptMutationCardProps {
@@ -71,6 +74,9 @@ export function PromptMutationCard({ mutation, isSelected, onToggleSelect, origi
                 <Badge variant="outline" className="text-[10px] sm:text-xs font-normal bg-background py-0.5">
                   Strength: {mutation.strength}
                 </Badge>
+                <Badge variant="outline" className="text-[10px] sm:text-xs font-normal bg-background py-0.5">
+                  Token count: {mutation.tokens}
+                </Badge>
               </div>
               
               <div className="flex items-center gap-2 mt-1 sm:mt-0">
@@ -114,6 +120,18 @@ export function PromptMutationCard({ mutation, isSelected, onToggleSelect, origi
                 Compare with original
                 <ArrowUpRight className="h-3 w-3" />
               </Button>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground">
+                      <DollarSign className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="top">
+                    Estimated cost for the mutation: ${mutation.cost}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
           </div>
         </div>

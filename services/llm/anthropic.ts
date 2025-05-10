@@ -10,6 +10,24 @@ type AnthropicCallOptions = {
   maxTokens?: number;
 };
 
+type AnthropicResponse = {
+  text: string;
+  usage: {
+    inputTokens: number;
+    outputTokens: number;
+    totalTokens: number;
+  };
+  outputCost: number;
+};
+
+const pricing: Record<string, { input: number; output: number }> = {
+  'claude-3-opus': { input: 0.015, output: 0.075 },
+  'claude-3-sonnet': { input: 0.0033, output: 0.0167 },
+  'claude-3-haiku': { input: 0.00025, output: 0.00125 },
+  'claude-3.5-sonnet': { input: 0.0033, output: 0.0167 },
+  'claude-3.7-sonnet': { input: 0.004, output: 0.02 },
+};
+
 export async function callAnthropic({
   prompt,
   modelId,
@@ -18,7 +36,7 @@ export async function callAnthropic({
   endpoint,
   temperature,
   maxTokens
-}: AnthropicCallOptions): Promise<string> {
+}: AnthropicCallOptions): Promise<AnthropicResponse> {
   const actualEndpoint = endpoint || "https://api.anthropic.com/v1/messages"
 
   const messages: ChatMessage[] = [
@@ -60,7 +78,15 @@ export async function callAnthropic({
     }
 
     const data = await response.json();
-    return data.content?.[0]?.text || ""
+    return {
+      text: data.content?.[0]?.text || "",
+      usage: {
+        inputTokens: data.usage?.input_tokens || 0,
+        outputTokens: data.usage?.output_tokens || 0,
+        totalTokens: data.usage?.input_tokens || 0 + data.usage?.output_tokens, 
+      },
+      outputCost: ((pricing[modelId] || pricing['claude-3-sonnet']).input / 1000) * data.usage?.output_tokens, 
+    };
   } catch (error) {
     console.error("Anthropic API call failed:", error);
     throw error;

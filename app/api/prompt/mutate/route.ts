@@ -75,7 +75,7 @@ export async function POST(req: Request) {
       const typePromises = Array.from({ length: numMutations }, async () => {
         try {
           console.log(`Making API request to ${normalizedProvider} model: ${modelId} for mutation type: ${mutationType.name}`);
-          const text = await callLLM({
+          const response = await callLLM({
             provider: provider,
             endpoint: clientEndpoint,
             prompt: prompt,
@@ -86,9 +86,11 @@ export async function POST(req: Request) {
           });
           
           return {
-            text: text || `[Empty response from ${normalizedProvider}]`,
+            text: response.text || `[Empty response from ${normalizedProvider}]`,
             type: mutationType.name,
             strength: mutationStrength,
+            tokens: response.usage?.outputTokens,
+            cost: response.outputCost,
           };
         } catch (mutationError) {
           console.error(`Error generating mutation (${normalizedProvider}) for type ${mutationType.name}:`, mutationError);

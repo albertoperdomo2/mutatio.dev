@@ -10,6 +10,21 @@ type DeepSeekCallOptions = {
   maxTokens?: number;
 };
 
+type DeepSeekResponse = {
+  text: string;
+  usage: {
+    inputTokens: number;
+    outputTokens: number;
+    totalTokens: number;
+  };
+  outputCost: number;
+};
+
+const pricing: Record<string, { input: number; output: number }> = {
+  'deepseek-coder': { input: 0.0005, output: 0.0015 },
+  'deepseek-chat': { input: 0.0005, output: 0.0015 },
+};
+
 export async function callDeepSeek({
   prompt,
   modelId,
@@ -18,7 +33,7 @@ export async function callDeepSeek({
   endpoint,
   temperature,
   maxTokens
-}: DeepSeekCallOptions): Promise<string> {
+}: DeepSeekCallOptions): Promise<DeepSeekResponse> {
   const messages: ChatMessage[] = [];
   const actualEndpoint = endpoint || "https://api.deepseek.com/v1/chat/completions"
 
@@ -60,7 +75,15 @@ export async function callDeepSeek({
     }
 
     const data = await response.json();
-    return data.choices[0]?.message?.content || ""
+    return {
+      text: data.choices[0]?.message?.content || "",
+      usage: {
+        inputTokens: data.usage?.prompt_tokens || 0,
+        outputTokens: data.usage?.completion_tokens || 0,
+        totalTokens: data.usage?.total_tokens || 0,
+      },
+      outputCost: ((pricing[modelId] || pricing['deepseek-chat']).input / 1000) * data.usage?.completion_tokens, 
+    };
   } catch (error) {
     console.error("DeepSeek API call failed:", error);
     throw error;

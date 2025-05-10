@@ -54,6 +54,8 @@ interface Mutation {
   text: string;
   type: string;
   strength: number;
+  tokens: number;
+  cost: number;
 }
 
 interface MutationType {
