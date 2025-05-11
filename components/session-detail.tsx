@@ -34,6 +34,8 @@ export function SessionDetail({ sessionId }: SessionDetailProps) {
     provider?: string;
     model?: string;
     mutationType?: string;
+    tokens: number;
+    cost: number;
     [key: string]: any;
   }
   
@@ -350,7 +352,9 @@ export function SessionDetail({ sessionId }: SessionDetailProps) {
                   id: String(index),
                   text: mutation.mutatedPrompt,
                   type: mutation.mutationType || 'mutated',
-                  strength: 5
+                  strength: 5,
+                  tokens: mutation.tokens,
+                  cost: mutation.cost
                 }}
                 isSelected={false}
                 onToggleSelect={() => {}}

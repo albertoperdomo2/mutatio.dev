@@ -44,14 +44,14 @@ export async function POST(req: Request, { params }: RouteParams) {
       }
     }
 
-    let response: string = '';
+    let text: string = '';
     const metadata: Record<string, unknown> = {}
     const startTime = Date.now()
 
     try {
       const providerLower = provider.toLowerCase();
       console.log(`Processing provider: ${providerLower}, modelId: ${modelId}`)
-      response = await callLLM({
+      const response = await callLLM({
         provider: providerLower,
         prompt: prompt, 
         modelId: modelId,
@@ -64,6 +64,7 @@ export async function POST(req: Request, { params }: RouteParams) {
       metadata.latency = Date.now() - startTime
       metadata.timestamp = new Date().toISOString()
       metadata.success = true
+      text = response.text
 
     } catch (error) {
       const apiError = error as Error;
@@ -77,7 +78,7 @@ export async function POST(req: Request, { params }: RouteParams) {
       metadata.latency = Date.now() - startTime;
       metadata.timestamp = new Date().toISOString();
       metadata.success = false;
-      response = `Error: ${errorMessage}`;
+      text = `Error: ${errorMessage}`;
     }
 
     const mutationResponse = await prisma.mutationResponse.create({
@@ -87,13 +88,13 @@ export async function POST(req: Request, { params }: RouteParams) {
         prompt,
         modelId,
         provider,
-        response,
+        response: text,
         metadata: JSON.stringify(metadata),
       },
     })
 
     return NextResponse.json({ 
-      response, 
+      text,
       metadata,
       id: mutationResponse.id 
     })
