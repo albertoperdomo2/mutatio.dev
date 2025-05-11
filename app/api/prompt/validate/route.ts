@@ -96,7 +96,7 @@ Provide your evaluation:`;
 
         validations.push({
           mutationId: mutatedPrompt.id,
-          evaluation,
+          evaluation: evaluation.text,
         });
       } catch (validationError) {
         console.error("Error validating prompt:", validationError instanceof Error ? validationError.message : validationError);
