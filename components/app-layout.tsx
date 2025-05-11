@@ -38,6 +38,7 @@ import {
   CommandShortcut 
 } from "@/components/ui/command"
 import { useToast } from "@/hooks/use-toast"
+import { Badge } from "@/components/ui/badge"
 
 interface AppLayoutProps {
   children: React.ReactNode
@@ -55,6 +56,7 @@ export function AppLayout({ children, user }: AppLayoutProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [commandOpen, setCommandOpen] = useState(false)
+  const [version, setVersion] = useState('0.0.0');
   const { toast } = useToast()
 
   // set up keyboard shortcut for the command palette
@@ -73,6 +75,14 @@ export function AppLayout({ children, user }: AppLayoutProps) {
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  useEffect(() => {
+    import('../package.json').then(pkg => {
+      setVersion(pkg.version);
+    }).catch(err => {
+      console.error('Failed to load version:', err);
+    });
+  }, []);
 
   const navigation = [
     { name: "Playground", href: "/playground", icon: LayoutGrid },
@@ -103,6 +113,9 @@ export function AppLayout({ children, user }: AppLayoutProps) {
               <Flask className="h-6 w-6 text-primary" />
               <span className="font-semibold">mutatio.dev</span>
             </Link>
+            <Badge variant="outline" className="text-[10px] sm:text-xs font-normal bg-indigo-50 text-indigo-500 py-0.5">
+               v{version}
+            </Badge>
           </div>
           <div className="flex items-center gap-2">
             <TooltipProvider>
