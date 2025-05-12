@@ -125,7 +125,7 @@ export function PromptMutationCard({ mutation, isSelected, onToggleSelect, origi
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground">
-                      <DollarSign className="h-4 w-4" />
+                      <DollarSign size={10} className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent side="top">

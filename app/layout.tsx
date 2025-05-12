@@ -27,14 +27,14 @@ export const metadata = {
         url: "https://mutatio.dev/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "mutatio | AI Prompt Engineering",
+        alt: "mutatio.dev | AI Prompt Engineering",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "mutatio | AI Prompt Engineering",
-    description: "Craft, refine, and optimize your AI prompts with mutatio",
+    title: "mutatio.dev | AI Prompt Engineering",
+    description: "Craft, refine, and optimize your AI prompts with mutatio.dev",
     images: ["https://mutatio.dev/opengraph-image.png"],
   },
 }

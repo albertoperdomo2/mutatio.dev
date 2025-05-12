@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: MutationPageProps): Promise<M
   
   if (!session) {
     return {
-      title: "Mutation - Not Found",
+      title: "mutation - not found",
     }
   }
 
@@ -32,16 +32,16 @@ export async function generateMetadata({ params }: MutationPageProps): Promise<M
 
     if (!mutation) {
       return {
-        title: "Mutation - Not Found",
+        title: "mutation - not found",
       }
     }
 
     return {
-      title: `Mutation - ${mutation.name}`,
+      title: `mutation - ${mutation.name}`,
     }
   } catch (_error) {
     return {
-      title: "Mutation - Error",
+      title: "mutation - error",
     }
   }
 }
