@@ -30,10 +30,9 @@ interface SessionDetailProps {
 export function SessionDetail({ sessionId }: SessionDetailProps) {
   interface Mutation {
     id?: number | string;
-    mutatedPrompt: string;
-    provider?: string;
-    model?: string;
-    mutationType?: string;
+    text: string;
+    type: string;
+    strength: number;
     tokens: number;
     cost: number;
     [key: string]: any;
@@ -350,9 +349,9 @@ export function SessionDetail({ sessionId }: SessionDetailProps) {
                 key={index}
                 mutation={{
                   id: String(index),
-                  text: mutation.mutatedPrompt,
-                  type: mutation.mutationType || 'mutated',
-                  strength: 5,
+                  text: mutation.text,
+                  type: mutation.type || 'mutated',
+                  strength: mutation.strength,
                   tokens: mutation.tokens,
                   cost: mutation.cost
                 }}
