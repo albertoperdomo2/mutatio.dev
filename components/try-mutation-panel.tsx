@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useToast } from "@/hooks/use-toast"
 import { Loader2, Sparkles, PlayCircle, Clock, Check, X } from "lucide-react"
+import MarkdownRenderer from "./markdown-renderer"
 
 interface TryMutationPanelProps {
   mutationId: string
@@ -212,7 +213,7 @@ export function TryMutationPanel({ mutationId, prompt, versionId }: TryMutationP
           
           <TabsContent value="try" className="space-y-4">
             <div className="bg-muted/20 p-3 rounded-md text-sm font-mono mb-4">
-              {prompt}
+              <MarkdownRenderer content={prompt} />
             </div>
             
             <div className="space-y-3">
@@ -270,7 +271,7 @@ export function TryMutationPanel({ mutationId, prompt, versionId }: TryMutationP
                   </div>
                 </div>
                 <div className="bg-muted/20 p-3 rounded-md text-sm whitespace-pre-line">
-                  {response.response}
+                  <MarkdownRenderer content={response.response} />
                 </div>
               </div>
             )}

@@ -10,6 +10,7 @@ import { DollarSign, Copy, Check, Diff, ArrowUpRight } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { getMutationTypeColor } from "@/lib/utils-diff"
 import { DiffView } from "@/components/diff-view"
+import MarkdownRenderer from "@/components/markdown-renderer"
 
 interface Mutation {
   id: string
@@ -107,7 +108,7 @@ export function PromptMutationCard({ mutation, isSelected, onToggleSelect, origi
             </div>
             
             <div className="rounded-md bg-muted/30 p-2 sm:p-3 text-xs sm:text-sm font-mono text-muted-foreground leading-relaxed overflow-x-auto">
-              {mutation.text}
+              <MarkdownRenderer content={mutation.text} />
             </div>
             
             <div className="flex justify-end">

@@ -4,6 +4,7 @@ import { redirect } from "next/navigation"
 import { authOptions } from "@/lib/auth"
 import { TryMutationPanel } from "@/components/try-mutation-panel"
 import { prisma } from "@/lib/prisma"
+import MarkdownRenderer from "@/components/markdown-renderer"
 
 interface MutationPageProps {
   params: {
@@ -125,7 +126,7 @@ export default async function MutationPage({ params }: MutationPageProps) {
               </div>
               <div className="p-4">
                 <div className="bg-muted/20 p-4 rounded-md font-mono text-sm whitespace-pre-wrap">
-                  {mutation.versions[0]?.prompt || "No version available"}
+                  <MarkdownRenderer content={mutation.versions[0]?.prompt || "No version available"} />
                 </div>
               </div>
             </div>

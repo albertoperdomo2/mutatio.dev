@@ -7,6 +7,7 @@ import { EnvProvider } from "./providers"
 import { Analytics } from "@vercel/analytics/react"
 import "../styles/globals.css"
 import "../styles/enhanced-ui.css"
+import "../styles/markdown.css"
 
 const inter = Inter({ subsets: ["latin"] })
 
