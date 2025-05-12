@@ -7,19 +7,25 @@ export interface DiffPart {
 }
 
 export function generateDiff(originalText: string, mutatedText: string): DiffPart[] {
-  return diffWords(originalText, mutatedText)
+  const safeOriginal = originalText || '';
+  const safeMutated = mutatedText || '';
+  return diffWords(safeOriginal, safeMutated)
 }
 
 export function getMutationTypeColor(type: string): string {
   if (!type) {
     return "bg-gray-500/10 text-gray-500 border-gray-200/20";
   }
-  
+
   if (type === 'default') {
     return "bg-gray-500/10 text-gray-500 border-gray-200/20";
   }
-  
+
   try {
+    if (typeof type !== 'string') {
+      return "bg-gray-500/10 text-gray-500 border-gray-200/20";
+    }
+
     const hash = type.split("").reduce((acc, char) => {
       return char.charCodeAt(0) + ((acc << 5) - acc)
     }, 0)
