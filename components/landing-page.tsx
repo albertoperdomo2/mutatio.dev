@@ -81,7 +81,9 @@ export function LandingPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 items-center">
               <div className="space-y-6 sm:space-y-8">
                 <Badge className="px-3 py-1 bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
-                  100% Open Source
+                  <a href="https://github.com/albertoperdomo2/mutatio.dev">
+                    100% Open Source
+                  </a>
                 </Badge>
                 <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
                   <span className="block">Stop writing bad</span>
